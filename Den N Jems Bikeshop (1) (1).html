@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Den N Jems Bikeshop</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        }
+        nav {
+            background: #333;
+            padding: 10px;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #f4f4f4;
+            text-decoration: underline;
+        }
+        section {
+            padding: 40px;
+            background: white;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            display: none;
+        }
+        img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            margin: 10px auto;
+            display: block;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+            width: 90%;
+            max-width: 300px;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#home" id="home-link">Home</a>
+        <a href="#gallery" id="gallery-link">Gallery</a>
+        <a href="#services" id="services-link">Services</a>
+        <a href="#login" id="login-link">Login</a>
+        <a href="#" id="logout-link" style="display: none;">Logout</a>
+    </nav>
+    
+    <section id="home" style="display: block;">
+        <h1>Den And Jems Bikeshop</h1>
+        <p>Providing high-quality bikes and professional repair services(Also Available Door to Door Services 8A.M to 4P.M only) Bike Store Located Near Lawaan National Highschool.</p>
+    </section>
+    
+    <section id="gallery">
+        <h2>Gallery</h2>
+        <p>Check out our latest bikes and prices.</p>
+        <img src="road.avif" alt="Road Bike">
+        <p>Road Bike - ₱28,000</p>
+        <img src="asd.jpg" alt="Mountain Bike">
+        <p>Mountain Bike - ₱42,000</p>
+        <img src="MountainPeakExplore4000thumb.webp" alt="Premium Mountain Bike">
+        <p>Premium Mountain Bike - ₱50,400</p>
+    </section>
+    
+    <section id="services">
+        <h2>Our Services</h2>
+        <p>We offer top-notch services for bike enthusiasts.</p>
+        <ul>
+            <li>Bike Repair - ₱2,800</li>
+            <li>Bike Delivery - ₱1,680</li>
+            <li>All bike prices available in-store.</li>
+        </ul>
+    </section>
+    
+    <section id="login">
+        <h2>Login</h2>
+        <label for="username">Username</label><br>
+        <input type="text" id="username" placeholder="Enter your username"><br>
+        
+        <label for="password">Password</label><br>
+        <input type="password" id="password" placeholder="Enter your password">
+        <br>
+        <p id="error-msg" class="error">Invalid credentials. Try again.</p>
+        <button id="login-btn">Login</button>
+    </section>
+    
+    <script>
+        const users = {
+            "admin": "password123" // Replace with hashed values in a real system
+        };
+        
+        function showSection(sectionId) {
+            document.querySelectorAll("section").forEach(section => section.style.display = "none");
+            document.getElementById(sectionId).style.display = "block";
+        }
+        
+        function checkLogin(event, section) {
+            if (!sessionStorage.getItem("isLoggedIn")) {
+                event.preventDefault();
+                alert("You must log in first.");
+            } else {
+                showSection(section);
+            }
+        }
+        
+        document.getElementById("login-btn").addEventListener("click", () => {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            
+            if (users[username] && users[username] === password) {
+                sessionStorage.setItem("isLoggedIn", "true");
+                alert("Login successful!");
+                showSection("home");
+                document.getElementById("login-link").style.display = "none";
+                document.getElementById("logout-link").style.display = "inline";
+            } else {
+                document.getElementById("error-msg").style.display = "block";
+            }
+        });
+        
+        document.getElementById("logout-link").addEventListener("click", () => {
+            sessionStorage.removeItem("isLoggedIn");
+            alert("Logged out successfully.");
+            showSection("home");
+            document.getElementById("login-link").style.display = "inline";
+            document.getElementById("logout-link").style.display = "none";
+        });
+        
+        document.getElementById("gallery-link").addEventListener("click", (event) => checkLogin(event, "gallery"));
+        document.getElementById("services-link").addEventListener("click", (event) => checkLogin(event, "services"));
+        document.getElementById("home-link").addEventListener("click", () => showSection("home"));
+        document.getElementById("login-link").addEventListener("click", () => showSection("login"));
+        
+        window.onload = function() {
+            if (sessionStorage.getItem("isLoggedIn")) {
+                document.getElementById("login-link").style.display = "none";
+                document.getElementById("logout-link").style.display = "inline";
+            }
+        };
+    </script>
+</body>
+</html>
